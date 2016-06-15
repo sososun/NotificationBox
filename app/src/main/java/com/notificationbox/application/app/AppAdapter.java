@@ -2,6 +2,7 @@
 package com.notificationbox.application.app;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,18 +94,13 @@ public class AppAdapter extends BaseAdapter {
         viewHolder.switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                Log.e("SOSO", "����change");
                 if (isChecked) {
                     cancellist.add(dataList.get(position).getPackageName());
                     isSelected.put(position, 0);
-                    // Log.e("SOSO", position+"   "+isSelected.get(position));
-
                 } else {
                     cancellist.remove(dataList.get(position).getPackageName());
                     isSelected.put(position, 1);
-                    // Log.e("SOSO", position+"   "+isSelected.get(position));
                 }
-                // Log.e("SOSO", ""+cancellist.size());
             }
         });
 

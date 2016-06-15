@@ -146,7 +146,6 @@ public class NotificationMonitor extends NotificationListenerService {
     }
     
     private void onNotificationCancel(StatusBarNotification sbn){
-//      cancelNotification(getApplicationContext(),true);
   
         for (int i = 0; i < AppAdapter.cancellist.size(); i++) {
             if (sbn.getPackageName().equals(AppAdapter.cancellist.get(i))) {
@@ -158,7 +157,12 @@ public class NotificationMonitor extends NotificationListenerService {
                     Log.i("SevenNLScancel", "notificationSubText:" + notificationSubText);
                     Log.i("SevenNLScancel", "time:" + notificationtime);
                     notificationcancellisthelper.insertDB();
-                    cancelNotification(sbn.getPackageName(), sbn.getTag(), sbn.getId());
+                    if(android.os.Build.VERSION.SDK_INT > 20){
+                        String key=sbn.getKey();
+                        cancelNotification(key);
+                    }else {
+                        cancelNotification(sbn.getPackageName(), sbn.getTag(), sbn.getId());
+                    }
                     Handler updateHandler = new Handler();
                     updateHandler.obtainMessage(1, 2).sendToTarget();
                 }

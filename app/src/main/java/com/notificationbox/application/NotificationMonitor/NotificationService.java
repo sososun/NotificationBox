@@ -26,9 +26,9 @@ public class NotificationService extends Service{
     public void handleMessage(Message msg) {
         switch (msg.what) {
             case 1:
-                ncBuilder.setContentText("��ǰ������" + msg.obj +
-                        "��֪ͨ");
-                Log.i("SevenNLS", "�{��handle");
+                ncBuilder.setContentText("已收到" + msg.obj +
+                        "消息");
+//                Log.i("SevenNLS", "�{��handle");
                 break;
 
             default:
@@ -50,8 +50,8 @@ public class NotificationService extends Service{
     }
     private void createOngoingNotifications(){
         
-        ncBuilder.setContentTitle("֪ͨ����");
-        ncBuilder.setContentText("��ǰ������"+NotificationMonitor.sunxinyang()+"��֪ͨ");
+        ncBuilder.setContentTitle("NotificationBox");
+        ncBuilder.setContentText("已收起"+NotificationMonitor.sunxinyang()+"个消息");
 //    ncBuilder.setTicker("Notification Listener Service Example");
         ncBuilder.setSmallIcon(R.mipmap.ic_launcher);
         ncBuilder.setOngoing(true);
