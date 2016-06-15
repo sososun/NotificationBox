@@ -12,6 +12,16 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="notificationbox_Design_Theme" parent="Theme.AppCompat">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <!--
+        <item name="colorPrimary">@color/filemanager_blue</item>
+        <item name="colorPrimaryDark">@color/blue</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorAccent">@color/white</item>
+        -->
+    </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

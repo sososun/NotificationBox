@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".NotificationBoxMainActivity" >
+
+    <android.support.design.widget.AppBarLayout
+    android:id="@+id/app"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:elevation="4dp"
+    android:translationZ="4dp"
+    >
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    </android.support.design.widget.AppBarLayout>
+    
+    
+    <Button
+        android:id="@+id/appList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="buttonOnClicked"
+        android:layout_below="@id/app"
+        android:text="应用列表" />
+
+    <Button
+        android:id="@+id/btnEnableUnEnableNotify"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/appList"
+        android:onClick="buttonOnClicked"
+        android:text="Enable/UnEnable Listener" />
+
+    <ListView
+        android:id="@+id/ListView1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btnEnableUnEnableNotify" >
+
+    </ListView>
+
+</RelativeLayout>
