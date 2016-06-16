@@ -2,6 +2,7 @@
 package com.notificationbox.application.app;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ public class AppAdapter extends BaseAdapter {
     {
         this.context = context;
         dataList.clear();
+        cancelListdbHelper = new CancelListDBHelper(context);
         for (int i = 0; i < applist.size(); i++)
         {
             dataList.add(applist.get(i));
@@ -83,16 +85,17 @@ public class AppAdapter extends BaseAdapter {
         } else {
             viewHolder.switch1.setChecked(false);
         }
-        cancelListdbHelper = new CancelListDBHelper(context);
         viewHolder.switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     BaseContact.cancellist.add(dataList.get(position).getPackageName());
+                    Log.e("SXY","add:"+BaseContact.cancellist.size());
                     cancelListdbHelper.insertCancelListDB(dataList.get(position).getPackageName());
                     saveCheckStatus(position,true);
                 } else {
                     BaseContact.cancellist.remove(dataList.get(position).getPackageName());
+                    Log.e("SXY","remove:"+BaseContact.cancellist.size()+"");
                     cancelListdbHelper.deleteCancelListDB(dataList.get(position).getPackageName());
                     saveCheckStatus(position,false);
                 }

@@ -19,7 +19,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.notificationbox.application.NotificationMonitor.NotificationAdapter;
-import com.notificationbox.application.NotificationMonitor.NotificationService;
 import com.notificationbox.application.app.Applist;
 import com.notificationbox.application.db.NotificationCancelListHelper;
 
@@ -43,8 +42,6 @@ public class NotificationBoxMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.notificationbox_activity_main);
         mContext = this;
-        Intent intent = new Intent(this, NotificationService.class);
-        startService(intent);
         initview();
         listview = (ListView) findViewById(R.id.ListView1);
 
