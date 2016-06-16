@@ -1,6 +1,7 @@
 
 package com.notificationbox.application.app;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
@@ -23,7 +24,6 @@ public class AppAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<AppInfo> dataList = new ArrayList<AppInfo>();
-    private static HashMap<Integer, Integer> isSelected = new HashMap<Integer, Integer>();
     public static ArrayList<String> cancellist = new ArrayList<String>();
     public static HashMap<String, String> cancelmap = new HashMap<String, String>();
 
@@ -34,12 +34,6 @@ public class AppAdapter extends BaseAdapter {
         for (int i = 0; i < applist.size(); i++)
         {
             dataList.add(applist.get(i));
-        }
-        if (isSelected.size() == 0) {
-            for (int i = 0; i < applist.size(); i++)
-            {
-                isSelected.put(i, 1);
-            }
         }
     }
 
@@ -86,9 +80,9 @@ public class AppAdapter extends BaseAdapter {
             viewHolder.appIcon.setImageDrawable(dataList.get(position).getAppIcon());
         }
         viewHolder.switch1.setOnCheckedChangeListener(null);
-        if (isSelected.get(position) == 0) {
+        if (getCheckStatus(position)) {
             viewHolder.switch1.setChecked(true);
-        } else if (isSelected.get(position) == 1) {
+        } else {
             viewHolder.switch1.setChecked(false);
         }
         viewHolder.switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -96,17 +90,29 @@ public class AppAdapter extends BaseAdapter {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     cancellist.add(dataList.get(position).getPackageName());
-                    isSelected.put(position, 0);
+                    saveCheckStatus(position,true);
                 } else {
                     cancellist.remove(dataList.get(position).getPackageName());
-                    isSelected.put(position, 1);
+                    saveCheckStatus(position,false);
                 }
             }
         });
 
         return v;
     }
-
+    private void saveCheckStatus(int position,boolean isCheck){
+        SharedPreferences mySharedPreferences= context.getSharedPreferences("test",
+                Activity.MODE_PRIVATE);
+        SharedPreferences.Editor editor = mySharedPreferences.edit();
+        editor.putBoolean(dataList.get(position).getPackageName(), isCheck);
+        editor.commit();
+    }
+    private boolean getCheckStatus(int position){
+        SharedPreferences mySharedPreferences= context.getSharedPreferences("test",
+                Activity.MODE_PRIVATE);
+        boolean status =mySharedPreferences.getBoolean(dataList.get(position).getPackageName(), false);
+        return status;
+    }
     static class ViewHolder {
         TextView appName;
 

@@ -51,14 +51,12 @@ public class Applist extends AppCompatActivity {
             }
         });
         thread.start();
-        // Populate data to listView
         app_listView = (ListView) findViewById(R.id.listview);
 
 
     }
     private void getPackageDate(){
         List<PackageInfo> packages = getPackageManager().getInstalledPackages(0);
-        // String[] arr = new String[packages.size()];
         for (int i = 0; i < packages.size(); i++) {
             PackageInfo packageInfo = packages.get(i);
             AppInfo tmpInfo = new AppInfo();
@@ -68,13 +66,8 @@ public class Applist extends AppCompatActivity {
             tmpInfo.setVersionName(packageInfo.versionName);
             tmpInfo.setVersionCode(packageInfo.versionCode);
             tmpInfo.setAppIcon(packageInfo.applicationInfo.loadIcon(getPackageManager()));
-            // Only display the non-system app info
             if ((packageInfo.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0)
             {
-
-                // arr[i] = tmpInfo.appName;
-                // appList.toArray();
-                // Collections.sort(appList);
                 appList.add(tmpInfo);
             }
         }
@@ -90,7 +83,6 @@ public class Applist extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-
                 finish();
             }
         });
