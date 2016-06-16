@@ -1,10 +1,7 @@
 
 package com.notificationbox.application.app;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,17 +12,18 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 
+import com.notificationbox.application.BaseContact;
 import com.notificationbox.application.R;
+import com.notificationbox.application.db.CancelListDBHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class AppAdapter extends BaseAdapter {
 
     Context context;
     ArrayList<AppInfo> dataList = new ArrayList<AppInfo>();
-    public static ArrayList<String> cancellist = new ArrayList<String>();
-    public static HashMap<String, String> cancelmap = new HashMap<String, String>();
+    CancelListDBHelper cancelListdbHelper;
+
 
     public AppAdapter(Context context, ArrayList<AppInfo> applist)
     {
@@ -85,14 +83,17 @@ public class AppAdapter extends BaseAdapter {
         } else {
             viewHolder.switch1.setChecked(false);
         }
+        cancelListdbHelper = new CancelListDBHelper(context);
         viewHolder.switch1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    cancellist.add(dataList.get(position).getPackageName());
+                    BaseContact.cancellist.add(dataList.get(position).getPackageName());
+                    cancelListdbHelper.insertCancelListDB(dataList.get(position).getPackageName());
                     saveCheckStatus(position,true);
                 } else {
-                    cancellist.remove(dataList.get(position).getPackageName());
+                    BaseContact.cancellist.remove(dataList.get(position).getPackageName());
+                    cancelListdbHelper.deleteCancelListDB(dataList.get(position).getPackageName());
                     saveCheckStatus(position,false);
                 }
             }
@@ -101,17 +102,10 @@ public class AppAdapter extends BaseAdapter {
         return v;
     }
     private void saveCheckStatus(int position,boolean isCheck){
-        SharedPreferences mySharedPreferences= context.getSharedPreferences("test",
-                Activity.MODE_PRIVATE);
-        SharedPreferences.Editor editor = mySharedPreferences.edit();
-        editor.putBoolean(dataList.get(position).getPackageName(), isCheck);
-        editor.commit();
+        BaseContact.setBooleanSharedPreferences(context,dataList.get(position).getPackageName(),isCheck);
     }
     private boolean getCheckStatus(int position){
-        SharedPreferences mySharedPreferences= context.getSharedPreferences("test",
-                Activity.MODE_PRIVATE);
-        boolean status =mySharedPreferences.getBoolean(dataList.get(position).getPackageName(), false);
-        return status;
+        return BaseContact.getBooleanSharedPreferences(context,dataList.get(position).getPackageName(), false);
     }
     static class ViewHolder {
         TextView appName;

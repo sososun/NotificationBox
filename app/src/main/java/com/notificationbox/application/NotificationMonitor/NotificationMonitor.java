@@ -14,6 +14,7 @@ import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
+import com.notificationbox.application.BaseContact;
 import com.notificationbox.application.app.AppAdapter;
 import com.notificationbox.application.db.NotificationCancelListHelper;
 
@@ -147,8 +148,8 @@ public class NotificationMonitor extends NotificationListenerService {
     
     private void onNotificationCancel(StatusBarNotification sbn){
   
-        for (int i = 0; i < AppAdapter.cancellist.size(); i++) {
-            if (sbn.getPackageName().equals(AppAdapter.cancellist.get(i))) {
+        for (int i = 0; i < BaseContact.cancellist.size(); i++) {
+            if (sbn.getPackageName().equals(BaseContact.cancellist.get(i))) {
                 if (notificationTitle != null && notificationText != null) {
                     Log.e("SOSO", "调用" + arrayList.toString());
                     arrayList.add(notificationTitle);
@@ -171,7 +172,7 @@ public class NotificationMonitor extends NotificationListenerService {
         }
     }
     public static int sunxinyang(){
-        return AppAdapter.cancellist.size();
+        return BaseContact.cancellist.size();
     }
     
     public static ArrayList<CharSequence> GetData(){
