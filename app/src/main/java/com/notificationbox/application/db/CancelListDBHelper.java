@@ -55,6 +55,7 @@ public class CancelListDBHelper extends SQLiteOpenHelper{
                 cursor.moveToNext();
             }
         }
+        cursor.close();
         return cancelList;
     }
 

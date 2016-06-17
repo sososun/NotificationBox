@@ -15,7 +15,7 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
 
     public static String TABLENAME = "notificationcanceltable";
     private static NotificationCancelListHelper dbHelper = null;
-    
+    public static NotificationCancelListHelper notificationCancelListHelper = null;
 //    public static NotificationCancelListHelper getInstance() {
 //        if (dbHelper == null) {
 //            dbHelper = new NotificationCancelListHelper();
@@ -30,6 +30,12 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
             int version) {
         super(context, name, factory, version);
         // TODO Auto-generated constructor stub
+    }
+    public static NotificationCancelListHelper getInstance(Context context){
+        if(notificationCancelListHelper == null){
+            notificationCancelListHelper = new NotificationCancelListHelper(context);
+        }
+        return notificationCancelListHelper;
     }
 
     @Override
@@ -60,6 +66,14 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
     private void deleteDB(){
         
     }
+    public long queryDBquantity(){
+        SQLiteDatabase db = getWritableDatabase();
+        Cursor cursor = db.query(TABLENAME,null,null,null,null,null,null);
+        cursor.moveToFirst();
+        long i = cursor.getLong(0);
+        cursor.close();
+        return i;
+    }
     public ArrayList<NotificationInfo> childqurey(){
         ArrayList<NotificationInfo> childitem = new ArrayList<NotificationInfo>();
         SQLiteDatabase db = getWritableDatabase();
@@ -80,6 +94,7 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
                     i++;
                 }
             }
+        cursor.close();
         return childitem;
     }
     
@@ -95,6 +110,7 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
                 cursor.moveToNext();
             }
         }
+        cursor.close();
         return items;
     }
     

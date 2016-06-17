@@ -1,6 +1,7 @@
 package com.notificationbox.application.NotificationMonitor;
 
 import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -38,52 +39,6 @@ public class NotificationMonitor extends NotificationListenerService {
     public static StatusBarNotification mPostedNotification;
     public static StatusBarNotification mRemovedNotification;
     NotificationCancelListHelper notificationcancellisthelper = new NotificationCancelListHelper(this, NotificationCancelListHelper.TABLENAME, null, 1);
-//    private CancelNotificationReceiver mReceiver = new CancelNotificationReceiver();
-    // String a;
-
-//    private Handler mMonitorHandler = new Handler() {
-//        @Override
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case EVENT_UPDATE_CURRENT_NOS:
-//                    updateCurrentNotifications();
-//                    break;
-//                default:
-//                    break;
-//            }
-//        }
-//    };
-
-//    class CancelNotificationReceiver extends BroadcastReceiver {
-//
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            String action;
-//
-//            if (intent != null && intent.getAction() != null) {
-//                action = intent.getAction();
-//                if (action.equals(ACTION_NLS_CONTROL)) {
-//                    String command = intent.getStringExtra("command");
-//                    if (TextUtils.equals(command, "cancel_last")) {
-//                        if (mCurrentNotifications != null && mCurrentNotificationsCounts >= 1) {
-//                            StatusBarNotification sbnn = getCurrentNotifications()[mCurrentNotificationsCounts - 1];
-//                            cancelNotification(sbnn.getPackageName(), sbnn.getTag(), sbnn.getId());
-//                        }
-//                    } else if (TextUtils.equals(command, "cancel_all")) {
-//                        cancelAllNotifications();
-//                    }
-//                }
-//            }
-//        }
-//
-//    }
-    public String getNotificationTitle() {
-        return notificationTitle;
-    }
-
-    public void setNotificationTitle(String notificationTitle) {
-        this.notificationTitle = notificationTitle;
-    }
     
     @Override
     public void onCreate() {
@@ -152,11 +107,11 @@ public class NotificationMonitor extends NotificationListenerService {
             if (sbn.getPackageName().equals(BaseContact.cancellist.get(i))) {
                 if (notificationTitle != null && notificationText != null) {
                     Log.e("SOSO", "调用" + arrayList.toString());
-                    arrayList.add(notificationTitle);
                     Log.i("SevenNLScancel", "notificationTitle:" + notificationTitle);
                     Log.i("SevenNLScancel", "notificationText:" + notificationText);
                     Log.i("SevenNLScancel", "notificationSubText:" + notificationSubText);
                     Log.i("SevenNLScancel", "time:" + notificationtime);
+                    arrayList.add(notificationTitle);
                     notificationcancellisthelper.insertDB();
                     if(android.os.Build.VERSION.SDK_INT > 20){
                         String key=sbn.getKey();
@@ -164,17 +119,14 @@ public class NotificationMonitor extends NotificationListenerService {
                     }else {
                         cancelNotification(sbn.getPackageName(), sbn.getTag(), sbn.getId());
                     }
-                    Handler updateHandler = new Handler();
-                    updateHandler.obtainMessage(1, 2).sendToTarget();
+                    Notification.Builder builder = new Notification.Builder(this);
+                    builder.setContentText("已收起"+ NotificationCancelListHelper.getInstance(getApplicationContext()).queryDBquantity()+"个消息");
+                    NotificationManager manager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+                    manager.notify(BaseContact.NOTIFICATION_ID,builder.build());
                 }
-
             }
         }
     }
-    public static int sunxinyang(){
-        return BaseContact.cancellist.size();
-    }
-    
     public static ArrayList<CharSequence> GetData(){
         return arrayList;
     }

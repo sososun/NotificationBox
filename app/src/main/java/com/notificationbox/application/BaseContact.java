@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class BaseContact {
 
     public static ArrayList<String> cancellist = new ArrayList<String>();
+    public static final int NOTIFICATION_ID = 1777;
 
     public static void setBooleanSharedPreferences(Context context,String key,boolean result){
         SharedPreferences mySharedPreferences= context.getSharedPreferences("NotificationBox",
