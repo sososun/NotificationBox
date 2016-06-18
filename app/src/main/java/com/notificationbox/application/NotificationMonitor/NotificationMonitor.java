@@ -2,6 +2,7 @@ package com.notificationbox.application.NotificationMonitor;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -11,11 +12,14 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.SystemClock;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
 import com.notificationbox.application.BaseContact;
+import com.notificationbox.application.NotificationBoxMainActivity;
+import com.notificationbox.application.R;
 import com.notificationbox.application.app.AppAdapter;
 import com.notificationbox.application.db.NotificationCancelListHelper;
 
@@ -119,13 +123,32 @@ public class NotificationMonitor extends NotificationListenerService {
                     }else {
                         cancelNotification(sbn.getPackageName(), sbn.getTag(), sbn.getId());
                     }
-                    Notification.Builder builder = new Notification.Builder(this);
-                    builder.setContentText("已收起"+ NotificationCancelListHelper.getInstance(getApplicationContext()).queryDBquantity()+"个消息");
-                    NotificationManager manager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-                    manager.notify(BaseContact.NOTIFICATION_ID,builder.build());
+                    createOngoingNotifications();
                 }
             }
         }
+    }
+    private void createOngoingNotifications(){
+        Notification.Builder ncBuilder = new Notification.Builder(this);
+        ncBuilder.setContentTitle("NotificationBox");
+        ncBuilder.setContentText("已收起"+ NotificationCancelListHelper.getInstance(getApplicationContext()).queryDBquantity()+"个消息");
+//    ncBuilder.setTicker("Notification Listener Service Example");
+        ncBuilder.setSmallIcon(R.mipmap.ic_launcher);
+        ncBuilder.setOngoing(true);
+        ncBuilder.setNumber(10);
+//    ncBuilder.setSound(Uri.withAppendedPath(Audio.Media.INTERNAL_CONTENT_URI, "6"));
+//        ncBuilder.setDefaults(100);
+        ncBuilder.setAutoCancel(false);
+//        ncBuilder.setLatestEventInfo(this, null, null, pendingIntent);
+//        startForeground(100, ncBuilder);
+        Intent notifyIntent = new Intent(this, NotificationBoxMainActivity.class);
+//        notifyIntent.putExtra("11", notificationTitle);
+        int requestCode = (int) SystemClock.uptimeMillis();
+        PendingIntent pendIntent = PendingIntent.getActivity(this, requestCode,
+                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        ncBuilder.setContentIntent(pendIntent);
+        NotificationManager manager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
+        manager.notify(BaseContact.NOTIFICATION_ID,ncBuilder.build());
     }
     public static ArrayList<CharSequence> GetData(){
         return arrayList;
