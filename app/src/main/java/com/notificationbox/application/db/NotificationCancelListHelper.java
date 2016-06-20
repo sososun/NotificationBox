@@ -105,9 +105,9 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         return childitem;
     }
     
-    public ArrayList<String> qurey(){
+    public ArrayList<String> queryAppname(){
         ArrayList<String> items = new ArrayList<String>();
-        SQLiteDatabase db = getWritableDatabase();
+        SQLiteDatabase db = getReadableDatabase();
         String sql = "select distinct appname from "+ TABLENAME;
         Cursor cursor = null;
         try {
@@ -126,12 +126,25 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         }
         return items;
     }
+    public void queryNotificationInfo(){
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor cursor = null;
+        String sql = "select * from "+TABLENAME;
+        try {
+            cursor = db.rawQuery(sql,null);
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }finally {
+            cursor.close();
+        }
+    }
     
     public ArrayList<NotificationInfo> cleanlist(){
         ArrayList<NotificationInfo> lastlist = new ArrayList<NotificationInfo>();
-        for(int i = 0 ;i<qurey().size();i++){
+        for(int i = 0; i< queryAppname().size(); i++){
             for(int j = 0;j<childqurey().size();j++){
-                if(qurey().get(i).equals(childqurey().get(j).getAppname())){
+                if(queryAppname().get(i).equals(childqurey().get(j).getAppname())){
                     lastlist.add(childqurey().get(j));
                 }
             }

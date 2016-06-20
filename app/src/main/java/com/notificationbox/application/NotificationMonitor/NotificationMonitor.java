@@ -1,8 +1,6 @@
 package com.notificationbox.application.NotificationMonitor;
 
 import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -10,17 +8,12 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.SystemClock;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.util.Log;
 
 import com.notificationbox.application.BaseContact;
-import com.notificationbox.application.NotificationBoxMainActivity;
-import com.notificationbox.application.R;
-import com.notificationbox.application.app.AppAdapter;
 import com.notificationbox.application.db.NotificationCancelListHelper;
 
 import java.text.SimpleDateFormat;
@@ -39,7 +32,6 @@ public class NotificationMonitor extends NotificationListenerService {
     private static final String TAG_PRE = "[" + NotificationMonitor.class.getSimpleName() + "] ";
     public static final String ACTION_NLS_CONTROL = "com.seven.notificationlistenerdemo.NLSCONTROL";
     public static int mCurrentNotificationsCounts = 0;
-    public static  ArrayList<CharSequence> arrayList = new ArrayList<CharSequence>();
     public static StatusBarNotification mPostedNotification;
     public static StatusBarNotification mRemovedNotification;
     NotificationCancelListHelper notificationcancellisthelper = new NotificationCancelListHelper(this, NotificationCancelListHelper.TABLENAME, null, 1);
@@ -110,12 +102,10 @@ public class NotificationMonitor extends NotificationListenerService {
         for (int i = 0; i < BaseContact.cancellist.size(); i++) {
             if (sbn.getPackageName().equals(BaseContact.cancellist.get(i))) {
                 if (notificationTitle != null && notificationText != null) {
-                    Log.e("SOSO", "调用" + arrayList.toString());
                     Log.i("SevenNLScancel", "notificationTitle:" + notificationTitle);
                     Log.i("SevenNLScancel", "notificationText:" + notificationText);
                     Log.i("SevenNLScancel", "notificationSubText:" + notificationSubText);
                     Log.i("SevenNLScancel", "time:" + notificationtime);
-                    arrayList.add(notificationTitle);
                     notificationcancellisthelper.insertDB();
                     if(android.os.Build.VERSION.SDK_INT > 20){
                         String key=sbn.getKey();
@@ -128,10 +118,6 @@ public class NotificationMonitor extends NotificationListenerService {
             }
         }
     }
-    public static ArrayList<CharSequence> GetData(){
-        return arrayList;
-    }
-
     @Override
     public void onNotificationRemoved(StatusBarNotification sbn) {
 //        updateCurrentNotifications();
