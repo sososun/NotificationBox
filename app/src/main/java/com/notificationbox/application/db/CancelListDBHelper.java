@@ -46,16 +46,23 @@ public class CancelListDBHelper extends SQLiteOpenHelper{
         db.delete(CANCEL_LIST_TABLE_NAME,"packageName=?",args);
     }
     public ArrayList<String> queryCancelListDB(){
+        Cursor cursor = null;
         ArrayList<String> cancelList = new ArrayList<String>();
         String[] args = {"packageName"};
-        Cursor cursor = db.query(CANCEL_LIST_TABLE_NAME,args,null,null,null,null,null);
-        if(cursor != null && cursor.moveToFirst()){
-            while (!cursor.isAfterLast()) {
-                cancelList.add(cursor.getString(cursor.getColumnIndexOrThrow("packageName")));
-                cursor.moveToNext();
+        try {
+            cursor = db.query(CANCEL_LIST_TABLE_NAME,args,null,null,null,null,null);
+            if(cursor != null && cursor.moveToFirst()){
+                while (!cursor.isAfterLast()) {
+                    cancelList.add(cursor.getString(cursor.getColumnIndexOrThrow("packageName")));
+                    cursor.moveToNext();
+                }
             }
+
+        }catch (Exception e){
+
+        }finally {
+            cursor.close();
         }
-        cursor.close();
         return cancelList;
     }
 

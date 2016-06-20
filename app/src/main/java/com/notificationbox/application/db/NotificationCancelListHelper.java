@@ -67,18 +67,28 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         
     }
     public long queryDBquantity(){
-        SQLiteDatabase db = getWritableDatabase();
-        Cursor cursor = db.query(TABLENAME,null,null,null,null,null,null);
-        cursor.moveToFirst();
-        long i = cursor.getLong(0);
-        cursor.close();
+        Cursor cursor = null;
+        long i;
+        try {
+            SQLiteDatabase db = getWritableDatabase();
+            cursor = db.query(TABLENAME,null,null,null,null,null,null);
+            cursor.moveToFirst();
+            i = cursor.getLong(0);
+
+        }catch (Exception e){
+            i = 0;
+        }finally {
+            cursor.close();
+        }
         return i;
     }
     public ArrayList<NotificationInfo> childqurey(){
         ArrayList<NotificationInfo> childitem = new ArrayList<NotificationInfo>();
         SQLiteDatabase db = getWritableDatabase();
         String sql = "select * from "+ TABLENAME;
-        Cursor cursor = db.rawQuery(sql, null);
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(sql, null);
             if (cursor != null && cursor.moveToFirst()) {
                 String appname = cursor.getString(cursor.getColumnIndexOrThrow("appname"));
                 String title = cursor.getString(cursor.getColumnIndexOrThrow("title"));
@@ -94,7 +104,11 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
                     i++;
                 }
             }
-        cursor.close();
+        }catch (Exception e){
+
+        }finally {
+            cursor.close();
+        }
         return childitem;
     }
     
@@ -102,15 +116,21 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         ArrayList<String> items = new ArrayList<String>();
         SQLiteDatabase db = getWritableDatabase();
         String sql = "select distinct appname from "+ TABLENAME;
-        Cursor cursor = db.rawQuery(sql, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            int INDEX_PATH = cursor.getColumnIndexOrThrow("appname");
-            while (!cursor.isAfterLast()) {
-                items.add(cursor.getString(INDEX_PATH));
-                cursor.moveToNext();
+        Cursor cursor = null;
+        try {
+            cursor = db.rawQuery(sql, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int INDEX_PATH = cursor.getColumnIndexOrThrow("appname");
+                while (!cursor.isAfterLast()) {
+                    items.add(cursor.getString(INDEX_PATH));
+                    cursor.moveToNext();
+                }
             }
+        }catch (Exception e){
+
+        }finally {
+            cursor.close();
         }
-        cursor.close();
         return items;
     }
     

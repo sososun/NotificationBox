@@ -123,32 +123,10 @@ public class NotificationMonitor extends NotificationListenerService {
                     }else {
                         cancelNotification(sbn.getPackageName(), sbn.getTag(), sbn.getId());
                     }
-                    createOngoingNotifications();
+                    BaseContact.createOngoingNotifications(this);
                 }
             }
         }
-    }
-    private void createOngoingNotifications(){
-        Notification.Builder ncBuilder = new Notification.Builder(this);
-        ncBuilder.setContentTitle("NotificationBox");
-        ncBuilder.setContentText("已收起"+ NotificationCancelListHelper.getInstance(getApplicationContext()).queryDBquantity()+"个消息");
-//    ncBuilder.setTicker("Notification Listener Service Example");
-        ncBuilder.setSmallIcon(R.mipmap.ic_launcher);
-        ncBuilder.setOngoing(true);
-        ncBuilder.setNumber(10);
-//    ncBuilder.setSound(Uri.withAppendedPath(Audio.Media.INTERNAL_CONTENT_URI, "6"));
-//        ncBuilder.setDefaults(100);
-        ncBuilder.setAutoCancel(false);
-//        ncBuilder.setLatestEventInfo(this, null, null, pendingIntent);
-//        startForeground(100, ncBuilder);
-        Intent notifyIntent = new Intent(this, NotificationBoxMainActivity.class);
-//        notifyIntent.putExtra("11", notificationTitle);
-        int requestCode = (int) SystemClock.uptimeMillis();
-        PendingIntent pendIntent = PendingIntent.getActivity(this, requestCode,
-                notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        ncBuilder.setContentIntent(pendIntent);
-        NotificationManager manager = (NotificationManager) getApplicationContext().getSystemService(NOTIFICATION_SERVICE);
-        manager.notify(BaseContact.NOTIFICATION_ID,ncBuilder.build());
     }
     public static ArrayList<CharSequence> GetData(){
         return arrayList;
