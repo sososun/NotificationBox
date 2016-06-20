@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteStatement;
 
 
 import com.notificationbox.application.NotificationMonitor.NotificationInfo;
@@ -66,21 +67,13 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
     private void deleteDB(){
         
     }
-    public long queryDBquantity(){
-        Cursor cursor = null;
-        long i;
-        try {
-            SQLiteDatabase db = getWritableDatabase();
-            cursor = db.query(TABLENAME,null,null,null,null,null,null);
-            cursor.moveToFirst();
-            i = cursor.getLong(0);
 
-        }catch (Exception e){
-            i = 0;
-        }finally {
-            cursor.close();
-        }
-        return i;
+    public long CancelNotificationCount() {
+        SQLiteDatabase db = getReadableDatabase();
+        String sql = "SELECT COUNT(*) FROM " + TABLENAME;
+        SQLiteStatement statement = db.compileStatement(sql);
+        long count = statement.simpleQueryForLong();
+        return count;
     }
     public ArrayList<NotificationInfo> childqurey(){
         ArrayList<NotificationInfo> childitem = new ArrayList<NotificationInfo>();

@@ -38,7 +38,7 @@ public class BaseContact {
     public static void createOngoingNotifications(Context context){
         Notification.Builder ncBuilder = new Notification.Builder(context);
         ncBuilder.setContentTitle("NotificationBox");
-        ncBuilder.setContentText("已收起"+ NotificationCancelListHelper.getInstance(context).queryDBquantity()+"个消息");
+        ncBuilder.setContentText("已收起"+ NotificationCancelListHelper.getInstance(context).CancelNotificationCount()+"个消息");
 //    ncBuilder.setTicker("Notification Listener Service Example");
         ncBuilder.setSmallIcon(R.mipmap.ic_launcher);
         ncBuilder.setOngoing(true);
