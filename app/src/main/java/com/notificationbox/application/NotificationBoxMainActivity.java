@@ -71,7 +71,8 @@ public class NotificationBoxMainActivity extends AppCompatActivity {
         if (!isEnabledNLS) {
             showConfirmDialog();
         }
-        NotificationAdapter notificationAdapter = new NotificationAdapter(mContext, NotificationCancelListHelper.getInstance(mContext).queryAppname());
+        NotificationAdapter notificationAdapter = new NotificationAdapter(mContext, NotificationCancelListHelper.getInstance(mContext).queryAppname(),
+                NotificationCancelListHelper.getInstance(mContext).childqurey());
         listview.setAdapter(notificationAdapter);
     }
 

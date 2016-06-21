@@ -34,7 +34,6 @@ public class NotificationMonitor extends NotificationListenerService {
     public static int mCurrentNotificationsCounts = 0;
     public static StatusBarNotification mPostedNotification;
     public static StatusBarNotification mRemovedNotification;
-    NotificationCancelListHelper notificationcancellisthelper = new NotificationCancelListHelper(this, NotificationCancelListHelper.TABLENAME, null, 1);
     
     @Override
     public void onCreate() {
@@ -78,23 +77,12 @@ public class NotificationMonitor extends NotificationListenerService {
     private void onNotificationInfo(Bundle extras,StatusBarNotification sbn){
         
         notificationTitle = extras.getString(Notification.EXTRA_TITLE);
-        notificationLargeIcon = ((Bitmap)extras.getParcelable(Notification.EXTRA_LARGE_ICON)); 
-        notificationSmallIcon = ((Bitmap)extras.getParcelable(Notification.EXTRA_SMALL_ICON)); 
+//        notificationLargeIcon = ((Bitmap)extras.getParcelable(Notification.EXTRA_LARGE_ICON));
+//        notificationSmallIcon = ((Bitmap)extras.getParcelable(Notification.EXTRA_SMALL_ICON));;
         notificationText = extras.getString(Notification.EXTRA_TEXT);
         notificationSubText = extras.getString(Notification.EXTRA_SUB_TEXT);
         notificationtime = getTime(sbn.getPostTime());
         notificationAppName = getProgramNameByPackageName(this,sbn.getPackageName());
-        Log.i("SevenNLS", "notificationTitle:"+notificationTitle);
-        Log.i("SevenNLS", "notificationText:"+notificationText);
-        Log.i("SevenNLS", "notificationSubText:"+notificationSubText);
-        Log.i("SevenNLS", "time:"+notificationtime);
-        Log.i("SevenNLS", "Appname:"+notificationAppName);
-        NotificationInfo.getInstance().setIcon(notificationLargeIcon);
-        NotificationInfo.getInstance().setTitle(notificationTitle);
-        NotificationInfo.getInstance().setText(notificationText);
-        NotificationInfo.getInstance().setSubtext(notificationSubText);
-        NotificationInfo.getInstance().setTime(notificationtime);
-        NotificationInfo.getInstance().setAppname(notificationAppName);
     }
     
     private void onNotificationCancel(StatusBarNotification sbn){
@@ -106,7 +94,7 @@ public class NotificationMonitor extends NotificationListenerService {
                     Log.i("SevenNLScancel", "notificationText:" + notificationText);
                     Log.i("SevenNLScancel", "notificationSubText:" + notificationSubText);
                     Log.i("SevenNLScancel", "time:" + notificationtime);
-                    notificationcancellisthelper.insertDB();
+                    NotificationCancelListHelper.getInstance(this).insertDB(notificationAppName,notificationTitle,notificationText,notificationtime);
                     if(android.os.Build.VERSION.SDK_INT > 20){
                         String key=sbn.getKey();
                         cancelNotification(key);

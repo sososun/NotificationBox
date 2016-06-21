@@ -6,9 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.notificationbox.application.R;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -17,12 +20,15 @@ public class NotificationAdapter extends BaseAdapter {
     // NotificationInfo n = new NotificationInfo();
     private Context context;
     private ArrayList<String> notificationparentlist;
-//    private ArrayList<CharSequence> notificationchildlist;
+    private ArrayList<NotificationInfo> notificationchildlist;
+    private static int PARENT_ITEM = 1;
+    private static int CHILD_ITEM = 2;
 //    private NotificationMonitor mNotificationMonitor = null;
     
-    public NotificationAdapter(Context context,ArrayList<String> appname){
+    public NotificationAdapter(Context context,ArrayList<String> appname,ArrayList<NotificationInfo> notificationInfos){
         this.context = context;
         notificationparentlist = appname;
+        notificationchildlist = notificationInfos;
     }
     @Override
     public int getCount() {
@@ -38,22 +44,65 @@ public class NotificationAdapter extends BaseAdapter {
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-//        ViewHolder viewHolder = null;
-//        if(convertView == null){
-            LayoutInflater vi = (LayoutInflater) context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-//            LayoutInflater li = LayoutInflater.from(context);
-            convertView = vi.inflate(R.layout.notificationparent_item, null);
-            TextView appname = (TextView) convertView.findViewById(R.id.appname);
-            appname.setText(notificationparentlist.get(position));
-//        }
+        int type = getItemViewType(position);
+        ViewHolderFather viewHolderFather = null;
+        ViewHolderChild viewHolderChild = null;
+        if(convertView == null){
+            if(type == PARENT_ITEM){
+                viewHolderFather = new ViewHolderFather();
+                LayoutInflater vi = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = vi.inflate(R.layout.notificationparent_item,null);
+                viewHolderFather.appName = (TextView) convertView.findViewById(R.id.appname);
+                convertView.setTag(viewHolderFather);
+            }else if(type == CHILD_ITEM){
+                viewHolderChild = new ViewHolderChild();
+                LayoutInflater vi = (LayoutInflater) context
+                        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = vi.inflate(R.layout.notificationchildren_item,null);
+                viewHolderChild.text = (TextView) convertView.findViewById(R.id.notificationText);
+                viewHolderChild.time = (TextView) convertView.findViewById(R.id.time);
+                convertView.setTag(viewHolderChild);
+            }
+        }else {
+            if(type == PARENT_ITEM){
+                viewHolderFather = (ViewHolderFather) convertView.getTag();
+            }else if (type == CHILD_ITEM){
+                viewHolderChild = (ViewHolderChild) convertView.getTag();
+            }
+        }
+        if(type == PARENT_ITEM){
+            if(viewHolderFather.appName != null){
+                viewHolderFather.appName.setText(notificationparentlist.get(position));
+            }
+        }else if(type == CHILD_ITEM){
+            viewHolderChild.text.setText(notificationchildlist.get(position).getText());
+//            viewHolderChild.subtext.setText(notificationchildlist.get(position).getText());
+            viewHolderChild.time.setText(notificationchildlist.get(position).getTime());
+        }
         return convertView;
     }
-    
-//    static class ViewHolder {
-//        TextView appName;
-//
-//        ImageView appIcon;
-//    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return 1;
+    }
+
+    @Override
+    public int getViewTypeCount() {
+        return 2;
+    }
+    static class ViewHolderFather {
+        TextView appName;
+
+        ImageView appIcon;
+    }
+    static class ViewHolderChild {
+        TextView subtext;
+
+        TextView text;
+
+        TextView time;
+    }
 
 }

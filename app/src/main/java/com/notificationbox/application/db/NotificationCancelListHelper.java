@@ -17,12 +17,6 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
     public static String TABLENAME = "notificationcanceltable";
     private static NotificationCancelListHelper dbHelper = null;
     public static NotificationCancelListHelper notificationCancelListHelper = null;
-//    public static NotificationCancelListHelper getInstance() {
-//        if (dbHelper == null) {
-//            dbHelper = new NotificationCancelListHelper();
-//        }
-//        return dbHelper;
-//    }
     public NotificationCancelListHelper(Context context){
         super(context, TABLENAME, null, 1);
     }
@@ -54,13 +48,13 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         
     }
     
-    public void insertDB(){
+    public void insertDB(String appName ,String title ,String text,String time){
         SQLiteDatabase db = getWritableDatabase();
         String sql = "replace into " + TABLENAME
                 + " (appname,title, text, time, icon) values (?, ?, ?, ?, ?)";
-        db.execSQL(sql, new Object[] { NotificationInfo.getInstance().getAppname(),NotificationInfo.getInstance().getTitle(),
-                NotificationInfo.getInstance().getText(), 
-                NotificationInfo.getInstance().getTime(), 
+        db.execSQL(sql, new Object[] { appName,title,
+                text,
+                time,
                 null});
     }
     
@@ -126,20 +120,6 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         }
         return items;
     }
-    public void queryNotificationInfo(){
-        SQLiteDatabase db = getReadableDatabase();
-        Cursor cursor = null;
-        String sql = "select * from "+TABLENAME;
-        try {
-            cursor = db.rawQuery(sql,null);
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }finally {
-            cursor.close();
-        }
-    }
-    
     public ArrayList<NotificationInfo> cleanlist(){
         ArrayList<NotificationInfo> lastlist = new ArrayList<NotificationInfo>();
         for(int i = 0; i< queryAppname().size(); i++){

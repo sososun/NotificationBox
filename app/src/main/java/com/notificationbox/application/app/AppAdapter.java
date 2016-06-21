@@ -59,8 +59,7 @@ public class AppAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder = null;
         View v = convertView;
-        if (v == null)
-        {
+        if (v == null) {
             viewHolder = new ViewHolder();
             LayoutInflater vi = (LayoutInflater) context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
