@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteStatement;
+import android.util.Log;
 
 
 import com.notificationbox.application.NotificationMonitor.NotificationInfo;
@@ -38,7 +39,7 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         // TODO Auto-generated method stub
         String notificationListSql = "create table if not exists "
                 + TABLENAME
-                + " (_id integer primary key autoincrement, appname varchar(255), title varchar(255), text varchar(255), time varchar(20), icon BINARY);";
+                + " (_id integer primary key autoincrement, appname varchar(255), title varchar(255), text varchar(255), subtext varchar(255), time varchar(20), icon BINARY);";
         db.execSQL(notificationListSql);
     }
 
@@ -48,12 +49,13 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         
     }
     
-    public void insertDB(String appName ,String title ,String text,String time){
+    public void insertDB(String appName ,String title ,String text,String subtext,String time){
         SQLiteDatabase db = getWritableDatabase();
         String sql = "replace into " + TABLENAME
-                + " (appname,title, text, time, icon) values (?, ?, ?, ?, ?)";
+                + " (appname,title, text, subtext, time, icon) values (?, ?, ?, ?, ?, ?)";
         db.execSQL(sql, new Object[] { appName,title,
                 text,
+                subtext,
                 time,
                 null});
     }
@@ -77,22 +79,18 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         try {
             cursor = db.rawQuery(sql, null);
             if (cursor != null && cursor.moveToFirst()) {
-                String appname = cursor.getString(cursor.getColumnIndexOrThrow("appname"));
-                String title = cursor.getString(cursor.getColumnIndexOrThrow("title"));
-                String text = cursor.getString(cursor.getColumnIndexOrThrow("text"));
-                String time = cursor.getString(cursor.getColumnIndexOrThrow("time"));
                 while (!cursor.isAfterLast()) {
-                    int i = 0;
-                    childitem.get(i).setAppname(appname);
-                    childitem.get(i).setTitle(title);
-                    childitem.get(i).setText(text);
-                    childitem.get(i).setTime(time);
+                    NotificationInfo.getInstance().setAppname(cursor.getString(cursor.getColumnIndexOrThrow("appname")));
+                    NotificationInfo.getInstance().setTitle(cursor.getString(cursor.getColumnIndexOrThrow("title")));
+                    NotificationInfo.getInstance().setText(cursor.getString(cursor.getColumnIndexOrThrow("text")));
+                    NotificationInfo.getInstance().setSubtext(cursor.getString(cursor.getColumnIndexOrThrow("subtext")));
+                    NotificationInfo.getInstance().setTime(cursor.getString(cursor.getColumnIndexOrThrow("time")));
+                    childitem.add(NotificationInfo.getInstance());
                     cursor.moveToNext();
-                    i++;
                 }
             }
         }catch (Exception e){
-
+            Log.e("SXY",e.getMessage());
         }finally {
             cursor.close();
         }

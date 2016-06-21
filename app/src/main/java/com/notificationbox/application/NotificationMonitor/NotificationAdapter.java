@@ -61,6 +61,7 @@ public class NotificationAdapter extends BaseAdapter {
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = vi.inflate(R.layout.notificationchildren_item,null);
                 viewHolderChild.text = (TextView) convertView.findViewById(R.id.notificationText);
+                viewHolderChild.subtext = (TextView) convertView.findViewById(R.id.notificationSubText);
                 viewHolderChild.time = (TextView) convertView.findViewById(R.id.time);
                 convertView.setTag(viewHolderChild);
             }
@@ -77,7 +78,7 @@ public class NotificationAdapter extends BaseAdapter {
             }
         }else if(type == CHILD_ITEM){
             viewHolderChild.text.setText(notificationchildlist.get(position).getText());
-//            viewHolderChild.subtext.setText(notificationchildlist.get(position).getText());
+            viewHolderChild.subtext.setText(notificationchildlist.get(position).getSubtext());
             viewHolderChild.time.setText(notificationchildlist.get(position).getTime());
         }
         return convertView;
@@ -85,7 +86,7 @@ public class NotificationAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        return 1;
+        return 2;
     }
 
     @Override

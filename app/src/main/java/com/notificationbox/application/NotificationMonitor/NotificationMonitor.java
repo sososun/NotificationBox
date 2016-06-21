@@ -94,7 +94,7 @@ public class NotificationMonitor extends NotificationListenerService {
                     Log.i("SevenNLScancel", "notificationText:" + notificationText);
                     Log.i("SevenNLScancel", "notificationSubText:" + notificationSubText);
                     Log.i("SevenNLScancel", "time:" + notificationtime);
-                    NotificationCancelListHelper.getInstance(this).insertDB(notificationAppName,notificationTitle,notificationText,notificationtime);
+                    NotificationCancelListHelper.getInstance(this).insertDB(notificationAppName,notificationTitle,notificationText,notificationSubText,notificationtime);
                     if(android.os.Build.VERSION.SDK_INT > 20){
                         String key=sbn.getKey();
                         cancelNotification(key);
