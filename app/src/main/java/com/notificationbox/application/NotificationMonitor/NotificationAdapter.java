@@ -32,11 +32,11 @@ public class NotificationAdapter extends BaseAdapter {
     }
     @Override
     public int getCount() {
-        return notificationparentlist.size();
+        return notificationchildlist.size();
     }
     @Override
     public Object getItem(int position) {
-        return notificationparentlist.get(position);
+        return notificationchildlist.get(position);
     }
     @Override
     public long getItemId(int position) {
