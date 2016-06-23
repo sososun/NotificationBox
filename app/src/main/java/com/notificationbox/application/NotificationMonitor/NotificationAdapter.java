@@ -60,6 +60,7 @@ public class NotificationAdapter extends BaseAdapter {
                 LayoutInflater vi = (LayoutInflater) context
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = vi.inflate(R.layout.notificationchildren_item,null);
+                viewHolderChild.title = (TextView) convertView.findViewById(R.id.notificationTitle);
                 viewHolderChild.text = (TextView) convertView.findViewById(R.id.notificationText);
                 viewHolderChild.subtext = (TextView) convertView.findViewById(R.id.notificationSubText);
                 viewHolderChild.time = (TextView) convertView.findViewById(R.id.time);
@@ -77,6 +78,7 @@ public class NotificationAdapter extends BaseAdapter {
                 viewHolderFather.appName.setText(notificationparentlist.get(position));
             }
         }else if(type == CHILD_ITEM){
+            viewHolderChild.title.setText(notificationchildlist.get(position).getTitle());
             viewHolderChild.text.setText(notificationchildlist.get(position).getText());
             viewHolderChild.subtext.setText(notificationchildlist.get(position).getSubtext());
             viewHolderChild.time.setText(notificationchildlist.get(position).getTime());
@@ -99,6 +101,9 @@ public class NotificationAdapter extends BaseAdapter {
         ImageView appIcon;
     }
     static class ViewHolderChild {
+
+        TextView title;
+
         TextView subtext;
 
         TextView text;
