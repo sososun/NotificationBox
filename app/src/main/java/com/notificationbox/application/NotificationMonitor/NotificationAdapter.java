@@ -14,18 +14,19 @@ import com.notificationbox.application.R;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NotificationAdapter extends BaseAdapter {
 
     // NotificationInfo n = new NotificationInfo();
     private Context context;
     private ArrayList<String> notificationparentlist;
-    private ArrayList<NotificationInfo> notificationchildlist;
+    private ArrayList<HashMap<String ,String>> notificationchildlist;
     private static int PARENT_ITEM = 1;
     private static int CHILD_ITEM = 2;
 //    private NotificationMonitor mNotificationMonitor = null;
     
-    public NotificationAdapter(Context context,ArrayList<String> appname,ArrayList<NotificationInfo> notificationInfos){
+    public NotificationAdapter(Context context,ArrayList<String> appname,ArrayList<HashMap<String,String>> notificationInfos){
         this.context = context;
         notificationparentlist = appname;
         notificationchildlist = notificationInfos;
@@ -78,10 +79,10 @@ public class NotificationAdapter extends BaseAdapter {
                 viewHolderFather.appName.setText(notificationparentlist.get(position));
             }
         }else if(type == CHILD_ITEM){
-            viewHolderChild.title.setText(notificationchildlist.get(position).getTitle());
-            viewHolderChild.text.setText(notificationchildlist.get(position).getText());
-            viewHolderChild.subtext.setText(notificationchildlist.get(position).getSubtext());
-            viewHolderChild.time.setText(notificationchildlist.get(position).getTime());
+            viewHolderChild.title.setText(notificationchildlist.get(position).get("title"));
+            viewHolderChild.text.setText(notificationchildlist.get(position).get("text"));
+            viewHolderChild.subtext.setText(notificationchildlist.get(position).get("subtext"));
+            viewHolderChild.time.setText(notificationchildlist.get(position).get("time"));
         }
         return convertView;
     }

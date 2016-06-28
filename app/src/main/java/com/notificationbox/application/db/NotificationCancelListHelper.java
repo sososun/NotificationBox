@@ -12,6 +12,7 @@ import android.util.Log;
 import com.notificationbox.application.NotificationMonitor.NotificationInfo;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class NotificationCancelListHelper extends SQLiteOpenHelper{
 
@@ -71,8 +72,10 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         long count = statement.simpleQueryForLong();
         return count;
     }
-    public ArrayList<NotificationInfo> childqurey(){
-        ArrayList<NotificationInfo> childitem = new ArrayList<NotificationInfo>();
+    public ArrayList<HashMap<String,String>> childqurey(){
+//        ArrayList<NotificationInfo> childitem = new ArrayList<NotificationInfo>();
+        ArrayList<HashMap<String,String>> childlist = new ArrayList<HashMap<String, String>>();
+
         SQLiteDatabase db = getWritableDatabase();
         String sql = "select * from "+ TABLENAME;
         Cursor cursor = null;
@@ -80,12 +83,19 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
             cursor = db.rawQuery(sql, null);
             if (cursor != null && cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
-                    NotificationInfo.getInstance().setAppname(cursor.getString(cursor.getColumnIndexOrThrow("appname")));
-                    NotificationInfo.getInstance().setTitle(cursor.getString(cursor.getColumnIndexOrThrow("title")));
-                    NotificationInfo.getInstance().setText(cursor.getString(cursor.getColumnIndexOrThrow("text")));
-                    NotificationInfo.getInstance().setSubtext(cursor.getString(cursor.getColumnIndexOrThrow("subtext")));
-                    NotificationInfo.getInstance().setTime(cursor.getString(cursor.getColumnIndexOrThrow("time")));
-                    childitem.add(NotificationInfo.getInstance());
+                    HashMap<String,String> childhashmap = new HashMap<String, String>();
+                    childhashmap.put("appname",cursor.getString(cursor.getColumnIndexOrThrow("appname")));
+                    childhashmap.put("title",cursor.getString(cursor.getColumnIndexOrThrow("title")));
+                    childhashmap.put("text",cursor.getString(cursor.getColumnIndexOrThrow("text")));
+                    childhashmap.put("subtext",cursor.getString(cursor.getColumnIndexOrThrow("subtext")));
+                    childhashmap.put("time",cursor.getString(cursor.getColumnIndexOrThrow("time")));
+//                    NotificationInfo.getInstance().setAppname(cursor.getString(cursor.getColumnIndexOrThrow("appname")));
+//                    NotificationInfo.getInstance().setTitle(cursor.getString(cursor.getColumnIndexOrThrow("title")));
+//                    NotificationInfo.getInstance().setText(cursor.getString(cursor.getColumnIndexOrThrow("text")));
+//                    NotificationInfo.getInstance().setSubtext(cursor.getString(cursor.getColumnIndexOrThrow("subtext")));
+//                    NotificationInfo.getInstance().setTime(cursor.getString(cursor.getColumnIndexOrThrow("time")));
+//                    childitem.add(NotificationInfo.getInstance());
+                    childlist.add(childhashmap);
                     cursor.moveToNext();
                 }
             }
@@ -94,7 +104,7 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         }finally {
             cursor.close();
         }
-        return childitem;
+        return childlist;
     }
     
     public ArrayList<String> queryAppname(){
@@ -122,9 +132,9 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         ArrayList<NotificationInfo> lastlist = new ArrayList<NotificationInfo>();
         for(int i = 0; i< queryAppname().size(); i++){
             for(int j = 0;j<childqurey().size();j++){
-                if(queryAppname().get(i).equals(childqurey().get(j).getAppname())){
-                    lastlist.add(childqurey().get(j));
-                }
+//                if(queryAppname().get(i).equals(childqurey().get(j).getAppname())){
+//                    lastlist.add(childqurey().get(j));
+//                }
             }
         }
         return lastlist;
