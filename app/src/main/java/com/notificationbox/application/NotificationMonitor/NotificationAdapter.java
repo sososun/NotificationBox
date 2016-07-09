@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import com.notificationbox.application.R;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -20,24 +18,38 @@ public class NotificationAdapter extends BaseAdapter {
 
     // NotificationInfo n = new NotificationInfo();
     private Context context;
-    private ArrayList<String> notificationparentlist;
+    private ArrayList<HashMap<String,String>> notificationparentlist;
     private ArrayList<HashMap<String ,String>> notificationchildlist;
+    private ArrayList<HashMap<String ,String>> notificationResultList;
     private static int PARENT_ITEM = 1;
     private static int CHILD_ITEM = 2;
 //    private NotificationMonitor mNotificationMonitor = null;
     
-    public NotificationAdapter(Context context,ArrayList<String> appname,ArrayList<HashMap<String,String>> notificationInfos){
+    public NotificationAdapter(Context context,ArrayList<HashMap<String,String>> appname,ArrayList<HashMap<String,String>> notificationInfos){
         this.context = context;
         notificationparentlist = appname;
         notificationchildlist = notificationInfos;
+            resultList(notificationparentlist,notificationchildlist);
+        }
+
+    private void resultList(ArrayList<HashMap<String,String>> notificationparentlist, ArrayList<HashMap<String ,String>> notificationchildlist){
+        notificationResultList = new ArrayList<>();
+        for(int i = 0;i < notificationparentlist.size();i++){
+            notificationResultList.add(notificationparentlist.get(i));
+            for(int j = 0;j < notificationchildlist.size();j++){
+                if(notificationparentlist.get(i).get("parent").equals(notificationchildlist.get(j).get("appname"))){
+                       notificationResultList.add(notificationchildlist.get(j));
+                }
+            }
+        }
     }
     @Override
     public int getCount() {
-        return notificationchildlist.size();
+        return  notificationResultList.size();
     }
     @Override
     public Object getItem(int position) {
-        return notificationchildlist.get(position);
+        return  notificationResultList.get(position);
     }
     @Override
     public long getItemId(int position) {
@@ -76,7 +88,7 @@ public class NotificationAdapter extends BaseAdapter {
         }
         if(type == PARENT_ITEM){
             if(viewHolderFather.appName != null){
-                viewHolderFather.appName.setText(notificationparentlist.get(position));
+                viewHolderFather.appName.setText(notificationparentlist.get(position).get("parent"));
             }
         }else if(type == CHILD_ITEM){
             viewHolderChild.title.setText(notificationchildlist.get(position).get("title"));
@@ -89,7 +101,11 @@ public class NotificationAdapter extends BaseAdapter {
 
     @Override
     public int getItemViewType(int position) {
-        return 2;
+        if(null == notificationResultList.get(position).get("parent")){
+            return CHILD_ITEM;
+        }else {
+            return PARENT_ITEM;
+        }
     }
 
     @Override
