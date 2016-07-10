@@ -18,8 +18,8 @@ public class NotificationAdapter extends BaseAdapter {
 
     // NotificationInfo n = new NotificationInfo();
     private Context context;
-    private ArrayList<HashMap<String,String>> notificationparentlist;
-    private ArrayList<HashMap<String ,String>> notificationchildlist;
+    private ArrayList<HashMap<String,String>> notificationParentList;
+    private ArrayList<HashMap<String ,String>> notificationChildList;
     private ArrayList<HashMap<String ,String>> notificationResultList;
     private static int PARENT_ITEM = 0;
     private static int CHILD_ITEM = 1;
@@ -27,9 +27,9 @@ public class NotificationAdapter extends BaseAdapter {
     
     public NotificationAdapter(Context context,ArrayList<HashMap<String,String>> appname,ArrayList<HashMap<String,String>> notificationInfos){
         this.context = context;
-        notificationparentlist = appname;
-        notificationchildlist = notificationInfos;
-            resultList(notificationparentlist,notificationchildlist);
+        notificationParentList = appname;
+        notificationChildList = notificationInfos;
+            resultList(notificationParentList, notificationChildList);
         }
 
     private void resultList(ArrayList<HashMap<String,String>> notificationparentlist, ArrayList<HashMap<String ,String>> notificationchildlist){
