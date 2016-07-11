@@ -14,7 +14,7 @@ import com.notificationbox.application.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class NotificationAdapter extends BaseAdapter {
+public class NotificationAdapter extends BaseAdapter implements SlideCutListView.ItemType{
 
     // NotificationInfo n = new NotificationInfo();
     private Context context;
@@ -114,6 +114,11 @@ public class NotificationAdapter extends BaseAdapter {
     }
     public void remove(int position){
         notificationResultList.remove(position);
+    }
+
+    @Override
+    public int getItemType(int position) {
+        return getItemViewType(position);
     }
 
     static class ViewHolderFather {

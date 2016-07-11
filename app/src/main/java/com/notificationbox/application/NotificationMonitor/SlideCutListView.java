@@ -64,6 +64,8 @@ public class SlideCutListView extends ListView {
 	 */
 	private RemoveDirection removeDirection;
 
+	private ItemType itemType;
+
 	// ����ɾ�����ö��ֵ
 	public enum RemoveDirection {
 		RIGHT, LEFT;
@@ -124,7 +126,9 @@ public class SlideCutListView extends ListView {
 			if (Math.abs(getScrollVelocity()) > SNAP_VELOCITY
 					|| (Math.abs(event.getX() - downX) > mTouchSlop && Math
 							.abs(event.getY() - downY) < mTouchSlop)) {
-				isSlide = true;
+				if(itemType.getItemType(slidePosition) == 1){
+					isSlide = true;
+				}
 			}
 			break;
 		}
@@ -232,7 +236,9 @@ public class SlideCutListView extends ListView {
 				}
 				
 				itemView.scrollTo(0, 0);
-				mRemoveListener.removeItem(removeDirection, slidePosition);
+				if(itemType.getItemType(slidePosition) == 1){
+					mRemoveListener.removeItem(removeDirection, slidePosition);
+				}
 			}
 		}
 	}
@@ -281,6 +287,10 @@ public class SlideCutListView extends ListView {
 	 */
 	public interface RemoveListener {
 		public void removeItem(RemoveDirection direction, int position);
+	}
+
+	public interface ItemType {
+		int getItemType(int position);
 	}
 
 }
