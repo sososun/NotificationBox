@@ -14,27 +14,29 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.notificationbox.application.NotificationMonitor.NotificationAdapter;
+import com.notificationbox.application.NotificationMonitor.SlideCutListView;
 import com.notificationbox.application.app.Applist;
 import com.notificationbox.application.db.NotificationCancelListHelper;
 
 
-public class NotificationBoxMainActivity extends AppCompatActivity {
+public class NotificationBoxMainActivity extends AppCompatActivity implements SlideCutListView.RemoveListener {
 
     private static final String TAG = "SevenNLS";
     private static final String TAG_PRE = "[" + NotificationBoxMainActivity.class.getSimpleName() + "] ";
     private static final String ENABLED_NOTIFICATION_LISTENERS = "enabled_notification_listeners";
     private static final String ACTION_NOTIFICATION_LISTENER_SETTINGS = "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS";
     private boolean isEnabledNLS = false;
-
+    private NotificationAdapter notificationAdapter;
     private TextView mTtitle;
     private ImageView icon;
     private Context mContext;
-    private ListView listview;
+    private SlideCutListView listview;
     private Toolbar mToolbar;
 
     @Override
@@ -43,7 +45,7 @@ public class NotificationBoxMainActivity extends AppCompatActivity {
         setContentView(R.layout.notificationbox_activity_main);
         mContext = this;
         initview();
-        listview = (ListView) findViewById(R.id.ListView1);
+        listview = (SlideCutListView) findViewById(R.id.ListView1);
 
     }
 
@@ -71,9 +73,18 @@ public class NotificationBoxMainActivity extends AppCompatActivity {
         if (!isEnabledNLS) {
             showConfirmDialog();
         }
-        NotificationAdapter notificationAdapter = new NotificationAdapter(mContext, NotificationCancelListHelper.getInstance(mContext).queryAppname(),
+        notificationAdapter = new NotificationAdapter(mContext, NotificationCancelListHelper.getInstance(mContext).queryAppname(),
                 NotificationCancelListHelper.getInstance(mContext).childqurey());
         listview.setAdapter(notificationAdapter);
+        listview.setRemoveListener(this);
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Toast.makeText(NotificationBoxMainActivity.this, "点击", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public void buttonOnClicked(View view) {
@@ -182,5 +193,23 @@ public class NotificationBoxMainActivity extends AppCompatActivity {
 
     private void logNLS(Object object) {
         Log.i(TAG, TAG_PRE + object);
+    }
+
+    @Override
+    public void removeItem(SlideCutListView.RemoveDirection direction, int position) {
+        notificationAdapter.remove(position);
+        notificationAdapter.notifyDataSetChanged();
+        listview.invalidate();
+        switch (direction) {
+            case RIGHT:
+                Toast.makeText(this, "向右删除  "+ position, Toast.LENGTH_SHORT).show();
+                break;
+            case LEFT:
+                Toast.makeText(this, "向左删除  "+ position, Toast.LENGTH_SHORT).show();
+                break;
+
+            default:
+                break;
+        }
     }
 }

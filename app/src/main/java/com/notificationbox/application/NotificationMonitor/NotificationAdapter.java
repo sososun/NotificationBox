@@ -112,6 +112,10 @@ public class NotificationAdapter extends BaseAdapter {
     public int getViewTypeCount() {
         return 2;
     }
+    public void remove(int position){
+        notificationResultList.remove(position);
+    }
+
     static class ViewHolderFather {
         TextView appName;
 

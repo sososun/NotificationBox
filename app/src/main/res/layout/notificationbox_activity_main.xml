@@ -35,7 +35,7 @@
         android:onClick="buttonOnClicked"
         android:text="Enable/UnEnable Listener" />
 
-    <ListView
+    <com.notificationbox.application.NotificationMonitor.SlideCutListView
         android:id="@+id/ListView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -44,6 +44,6 @@
         android:layout_alignParentRight="true"
         android:layout_below="@+id/btnEnableUnEnableNotify" >
 
-    </ListView>
+    </com.notificationbox.application.NotificationMonitor.SlideCutListView>
 
 </RelativeLayout>
