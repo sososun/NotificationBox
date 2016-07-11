@@ -25,7 +25,7 @@ import com.notificationbox.application.app.Applist;
 import com.notificationbox.application.db.NotificationCancelListHelper;
 
 
-public class NotificationBoxMainActivity extends AppCompatActivity implements SlideCutListView.RemoveListener {
+public class NotificationBoxMainActivity extends AppCompatActivity implements SlideCutListView.RemoveListener ,SlideCutListView.ItemType{
 
     private static final String TAG = "SevenNLS";
     private static final String TAG_PRE = "[" + NotificationBoxMainActivity.class.getSimpleName() + "] ";
@@ -77,6 +77,7 @@ public class NotificationBoxMainActivity extends AppCompatActivity implements Sl
                 NotificationCancelListHelper.getInstance(mContext).childqurey());
         listview.setAdapter(notificationAdapter);
         listview.setRemoveListener(this);
+        listview.setItemType(this);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -211,5 +212,10 @@ public class NotificationBoxMainActivity extends AppCompatActivity implements Sl
             default:
                 break;
         }
+    }
+
+    @Override
+    public int getItemType(int position) {
+        return notificationAdapter.getItemViewType(position);
     }
 }

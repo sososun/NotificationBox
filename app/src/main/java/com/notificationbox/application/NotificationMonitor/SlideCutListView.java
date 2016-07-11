@@ -95,6 +95,10 @@ public class SlideCutListView extends ListView {
 		this.mRemoveListener = removeListener;
 	}
 
+	public void setItemType(ItemType itemType) {
+		this.itemType = itemType;
+	}
+
 	/**
 	 * �ַ��¼�����Ҫ�������жϵ�������Ǹ�item, �Լ�ͨ��postDelayed��������Ӧ���һ����¼�
 	 */
