@@ -133,4 +133,22 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         }
         return items;
     }
+
+    public boolean queryAppnameIsExist(String appName){
+        Cursor cursor = null;
+        SQLiteDatabase db = getReadableDatabase();
+        String[] args = {appName};
+        try{
+            cursor = db.query(TABLENAME,null,"appname=?",args,null,null,null);
+            boolean i = cursor.moveToFirst();
+            if(i){
+                return true;
+            }
+        }catch (Exception e){
+            Log.e("SXY",e+"");
+        }finally {
+            cursor.close();
+        }
+        return false;
+    }
 }

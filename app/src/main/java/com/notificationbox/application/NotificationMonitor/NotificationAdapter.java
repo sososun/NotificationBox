@@ -2,6 +2,7 @@
 package com.notificationbox.application.NotificationMonitor;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.notificationbox.application.BaseContact;
 import com.notificationbox.application.R;
 import com.notificationbox.application.db.NotificationCancelListHelper;
 
@@ -113,9 +115,15 @@ public class NotificationAdapter extends BaseAdapter {
     public int getViewTypeCount() {
         return 2;
     }
-    public void remove(int position,Context context){
+    public void removeItem(int position, Context context){
         NotificationCancelListHelper.getInstance(context).deleteDBdate(notificationResultList.get(position).get("_id"));
-        notificationResultList.remove(position);
+        BaseContact.createOngoingNotifications(context);
+        if(!NotificationCancelListHelper.getInstance(context).queryAppnameIsExist(notificationResultList.get(position).get("appname"))){
+            notificationResultList.remove(position);
+            notificationResultList.remove(position-1);
+        }else {
+            notificationResultList.remove(position);
+        }
     }
 
     static class ViewHolderFather {
