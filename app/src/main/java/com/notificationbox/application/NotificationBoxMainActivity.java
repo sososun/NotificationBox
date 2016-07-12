@@ -198,7 +198,7 @@ public class NotificationBoxMainActivity extends AppCompatActivity implements Sl
 
     @Override
     public void removeItem(SlideCutListView.RemoveDirection direction, int position) {
-        notificationAdapter.remove(position);
+        notificationAdapter.remove(position,getApplicationContext());
         notificationAdapter.notifyDataSetChanged();
         listview.invalidate();
         switch (direction) {

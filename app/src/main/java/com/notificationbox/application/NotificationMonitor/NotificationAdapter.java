@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.notificationbox.application.R;
+import com.notificationbox.application.db.NotificationCancelListHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -112,7 +113,8 @@ public class NotificationAdapter extends BaseAdapter {
     public int getViewTypeCount() {
         return 2;
     }
-    public void remove(int position){
+    public void remove(int position,Context context){
+        NotificationCancelListHelper.getInstance(context).deleteDBdate(notificationResultList.get(position).get("_id"));
         notificationResultList.remove(position);
     }
 

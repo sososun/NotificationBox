@@ -61,8 +61,10 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
                 null});
     }
     
-    private void deleteDB(){
-        
+    public void deleteDBdate(String id){
+        SQLiteDatabase db = getWritableDatabase();
+        String[] args = {id};
+        db.delete(TABLENAME,"_id=?",args);
     }
 
     public long CancelNotificationCount() {
@@ -84,6 +86,7 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
             if (cursor != null && cursor.moveToFirst()) {
                 while (!cursor.isAfterLast()) {
                     HashMap<String,String> childhashmap = new HashMap<String, String>();
+                    childhashmap.put("_id",cursor.getString(cursor.getColumnIndexOrThrow("_id")));
                     childhashmap.put("appname",cursor.getString(cursor.getColumnIndexOrThrow("appname")));
                     childhashmap.put("title",cursor.getString(cursor.getColumnIndexOrThrow("title")));
                     childhashmap.put("text",cursor.getString(cursor.getColumnIndexOrThrow("text")));
@@ -130,16 +133,4 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         }
         return items;
     }
-    public ArrayList<NotificationInfo> cleanlist(){
-        ArrayList<NotificationInfo> lastlist = new ArrayList<NotificationInfo>();
-        for(int i = 0; i< queryAppname().size(); i++){
-            for(int j = 0;j<childqurey().size();j++){
-//                if(queryAppname().get(i).equals(childqurey().get(j).getAppname())){
-//                    lastlist.add(childqurey().get(j));
-//                }
-            }
-        }
-        return lastlist;
-    }
-
 }
