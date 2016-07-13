@@ -46,4 +46,13 @@
 
     </com.notificationbox.application.NotificationMonitor.SlideCutListView>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="删除全部"
+        android:id="@+id/deleteAll"
+        android:layout_below="@+id/app"
+        android:onClick="buttonOnClicked"
+        android:layout_toEndOf="@+id/appList" />
+
 </RelativeLayout>

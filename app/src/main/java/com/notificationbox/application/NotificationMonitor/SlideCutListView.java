@@ -147,7 +147,7 @@ public class SlideCutListView extends ListView {
 	/**
 	 * ���һ�����getScrollX()���ص������Ե�ľ��룬������View���ԵΪԭ�㵽��ʼ�����ľ��룬�������ұ߻���Ϊ��ֵ
 	 */
-	private void scrollRight() {
+	public void scrollRight() {
 		removeDirection = RemoveDirection.RIGHT;
 		final int delta = (screenWidth + itemView.getScrollX());
 		// ����startScroll����������һЩ�����Ĳ���������computeScroll()�����е���scrollTo������item

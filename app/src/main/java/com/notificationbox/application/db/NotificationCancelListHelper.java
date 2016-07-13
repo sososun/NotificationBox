@@ -66,6 +66,15 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         String[] args = {id};
         db.delete(TABLENAME,"_id=?",args);
     }
+    public void deleteAll(){
+        SQLiteDatabase db = getWritableDatabase();
+        db.delete(TABLENAME,null,null);
+    }
+    public void deleteApp(String appName){
+        SQLiteDatabase db = getWritableDatabase();
+        String[] args = {appName};
+        db.delete(TABLENAME,"appname=?",args);
+    }
 
     public long CancelNotificationCount() {
         SQLiteDatabase db = getReadableDatabase();

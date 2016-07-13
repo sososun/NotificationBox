@@ -7,7 +7,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.notificationbox.application.BaseContact;
@@ -21,14 +23,16 @@ public class NotificationAdapter extends BaseAdapter {
 
     // NotificationInfo n = new NotificationInfo();
     private Context context;
+    private ListView listView;
     private ArrayList<HashMap<String,String>> notificationParentList;
     private ArrayList<HashMap<String ,String>> notificationChildList;
-    private ArrayList<HashMap<String ,String>> notificationResultList;
+    public ArrayList<HashMap<String ,String>> notificationResultList;
     private static int PARENT_ITEM = 0;
     private static int CHILD_ITEM = 1;
 //    private NotificationMonitor mNotificationMonitor = null;
     
-    public NotificationAdapter(Context context,ArrayList<HashMap<String,String>> appname,ArrayList<HashMap<String,String>> notificationInfos){
+    public NotificationAdapter(Context context,ArrayList<HashMap<String,String>> appname,ArrayList<HashMap<String,String>> notificationInfos,ListView listView){
+        this.listView = listView;
         this.context = context;
         notificationParentList = appname;
         notificationChildList = notificationInfos;
@@ -59,7 +63,7 @@ public class NotificationAdapter extends BaseAdapter {
         return position;
     }
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         int type = getItemViewType(position);
         ViewHolderFather viewHolderFather = null;
         ViewHolderChild viewHolderChild = null;
@@ -70,6 +74,7 @@ public class NotificationAdapter extends BaseAdapter {
                         .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 convertView = vi.inflate(R.layout.notificationparent_item,null);
                 viewHolderFather.appName = (TextView) convertView.findViewById(R.id.appname);
+                viewHolderFather.cancelItem = (Button) convertView.findViewById(R.id.cancelItem);
                 convertView.setTag(viewHolderFather);
             }else if(type == CHILD_ITEM){
                 viewHolderChild = new ViewHolderChild();
@@ -92,6 +97,12 @@ public class NotificationAdapter extends BaseAdapter {
         if(type == PARENT_ITEM){
             if(viewHolderFather.appName != null){
                 viewHolderFather.appName.setText(notificationResultList.get(position).get("parent"));
+                viewHolderFather.cancelItem.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        removeApp(context,notificationResultList.get(position).get("parent"),position,listView);
+                    }
+                });
             }
         }else if(type == CHILD_ITEM){
             viewHolderChild.title.setText(notificationResultList.get(position).get("title"));
@@ -115,7 +126,7 @@ public class NotificationAdapter extends BaseAdapter {
     public int getViewTypeCount() {
         return 2;
     }
-    public void removeItem(int position, Context context){
+    public void removeItem(int position, Context context, ListView listView){
         NotificationCancelListHelper.getInstance(context).deleteDBdate(notificationResultList.get(position).get("_id"));
         BaseContact.createOngoingNotifications(context);
         if(!NotificationCancelListHelper.getInstance(context).queryAppnameIsExist(notificationResultList.get(position).get("appname"))){
@@ -124,10 +135,33 @@ public class NotificationAdapter extends BaseAdapter {
         }else {
             notificationResultList.remove(position);
         }
+        notifyDataSetChanged();
+        listView.invalidate();
+    }
+    public void removeApp(Context context,String appName,int position,ListView listView){
+        NotificationCancelListHelper.getInstance(context).deleteApp(appName);
+        BaseContact.createOngoingNotifications(context);
+        for(int i = notificationResultList.size() - 1;i > position;i--){
+            if(notificationResultList.get(i).get("appname").equals(notificationResultList.get(position).get("parent"))){
+                notificationResultList.remove(i);
+            }
+        }
+        notificationResultList.remove(position);
+        notifyDataSetChanged();
+        listView.invalidate();
+    }
+    public void removeAll(Context context,ListView listView){
+        NotificationCancelListHelper.getInstance(context).deleteAll();
+        BaseContact.createOngoingNotifications(context);
+        notificationResultList.clear();
+        notifyDataSetChanged();
+        listView.invalidate();
     }
 
     static class ViewHolderFather {
         TextView appName;
+
+        Button cancelItem;
 
         ImageView appIcon;
     }

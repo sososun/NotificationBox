@@ -74,7 +74,7 @@ public class NotificationBoxMainActivity extends AppCompatActivity implements Sl
             showConfirmDialog();
         }
         notificationAdapter = new NotificationAdapter(mContext, NotificationCancelListHelper.getInstance(mContext).queryAppname(),
-                NotificationCancelListHelper.getInstance(mContext).childqurey());
+                NotificationCancelListHelper.getInstance(mContext).childqurey(),listview);
         listview.setAdapter(notificationAdapter);
         listview.setRemoveListener(this);
         listview.setItemType(this);
@@ -97,7 +97,9 @@ public class NotificationBoxMainActivity extends AppCompatActivity implements Sl
         } else if (id == R.id.btnEnableUnEnableNotify) {
             logNLS("Enable/UnEnable notification...");
             openNotificationAccess();
-        } else {
+        } else if (id == R.id.deleteAll){
+//            listview.scrollRight();
+            notificationAdapter.removeAll(getApplicationContext(),listview);
         }
     }
 
@@ -198,9 +200,7 @@ public class NotificationBoxMainActivity extends AppCompatActivity implements Sl
 
     @Override
     public void removeItem(SlideCutListView.RemoveDirection direction, int position) {
-        notificationAdapter.removeItem(position,getApplicationContext());
-        notificationAdapter.notifyDataSetChanged();
-        listview.invalidate();
+        notificationAdapter.removeItem(position,getApplicationContext(),listview);
         switch (direction) {
             case RIGHT:
                 Toast.makeText(this, "向右删除  "+ position, Toast.LENGTH_SHORT).show();
