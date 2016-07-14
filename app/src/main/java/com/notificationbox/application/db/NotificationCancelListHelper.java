@@ -121,7 +121,6 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
     
     public ArrayList<HashMap<String,String>> queryAppname(){
         ArrayList<HashMap<String,String>> items = new ArrayList<>();
-        HashMap<String,String> item = new HashMap<>();
         SQLiteDatabase db = getReadableDatabase();
         String sql = "select distinct appname from "+ TABLENAME;
         Cursor cursor = null;
@@ -130,6 +129,7 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
             if (cursor != null && cursor.moveToFirst()) {
                 int INDEX_PATH = cursor.getColumnIndexOrThrow("appname");
                 while (!cursor.isAfterLast()) {
+                    HashMap<String,String> item = new HashMap<>();
                     item.put("parent",cursor.getString(INDEX_PATH));
                     items.add(item);
                     cursor.moveToNext();

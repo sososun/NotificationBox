@@ -142,7 +142,7 @@ public class NotificationAdapter extends BaseAdapter {
         NotificationCancelListHelper.getInstance(context).deleteApp(appName);
         BaseContact.createOngoingNotifications(context);
         for(int i = notificationResultList.size() - 1;i > position;i--){
-            if(notificationResultList.get(i).get("appname").equals(notificationResultList.get(position).get("parent"))){
+            if(notificationResultList.get(i).get("appname") != null && notificationResultList.get(i).get("appname").equals(notificationResultList.get(position).get("parent"))){
                 notificationResultList.remove(i);
             }
         }
