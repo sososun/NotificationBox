@@ -12,17 +12,18 @@
         android:src="@mipmap/ic_launcher"/>
     <Button
         android:id="@+id/cancelItem"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:text="删除"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 		android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="22dp"
-        android:background="@mipmap/ic_launcher"/>
+        android:layout_marginRight="22dp" />
 
     <Button
         android:id="@+id/addToList"
-        android:layout_width="28dp"
-        android:layout_height="28dp"
+        android:text="加白"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignTop="@+id/cancelItem"
         android:layout_toLeftOf="@+id/cancelItem"
         android:layout_marginRight="28.5dp" />

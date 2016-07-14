@@ -89,19 +89,19 @@ public class AppAdapter extends BaseAdapter {
                 if (isChecked) {
                     BaseContact.cancellist.add(dataList.get(position).getPackageName());
                     cancelListdbHelper.insertCancelListDB(dataList.get(position).getPackageName());
-                    saveCheckStatus(position,true);
+                    saveCheckStatus(true,context,dataList.get(position).getPackageName());
                 } else {
                     BaseContact.cancellist.remove(dataList.get(position).getPackageName());
                     cancelListdbHelper.deleteCancelListDB(dataList.get(position).getPackageName());
-                    saveCheckStatus(position,false);
+                    saveCheckStatus(false,context,dataList.get(position).getPackageName());
                 }
             }
         });
 
         return v;
     }
-    private void saveCheckStatus(int position,boolean isCheck){
-        BaseContact.setBooleanSharedPreferences(context,dataList.get(position).getPackageName(),isCheck);
+    public static void saveCheckStatus(boolean isCheck,Context context,String packageName){
+        BaseContact.setBooleanSharedPreferences(context,packageName,isCheck);
     }
     private boolean getCheckStatus(int position){
         return BaseContact.getBooleanSharedPreferences(context,dataList.get(position).getPackageName(), false);

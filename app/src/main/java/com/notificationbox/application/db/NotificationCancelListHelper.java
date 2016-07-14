@@ -40,7 +40,7 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         // TODO Auto-generated method stub
         String notificationListSql = "create table if not exists "
                 + TABLENAME
-                + " (_id integer primary key autoincrement, appname varchar(255), title varchar(255), text varchar(255), subtext varchar(255), time varchar(20), icon BINARY);";
+                + " (_id integer primary key autoincrement, appname varchar(255), title varchar(255), text varchar(255), subtext varchar(255), time varchar(20), packagename varchar(255), icon BINARY);";
         db.execSQL(notificationListSql);
     }
 
@@ -50,14 +50,15 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
         
     }
     
-    public void insertDB(String appName ,String title ,String text,String subtext,String time){
+    public void insertDB(String appName ,String title ,String text,String subtext,String time,String packagename){
         SQLiteDatabase db = getWritableDatabase();
         String sql = "replace into " + TABLENAME
-                + " (appname,title, text, subtext, time, icon) values (?, ?, ?, ?, ?, ?)";
+                + " (appname,title, text, subtext, time, packagename, icon) values (?, ?, ?, ?, ?, ?, ?)";
         db.execSQL(sql, new Object[] { appName,title,
                 text,
                 subtext,
                 time,
+                packagename,
                 null});
     }
     
@@ -122,7 +123,7 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
     public ArrayList<HashMap<String,String>> queryAppname(){
         ArrayList<HashMap<String,String>> items = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
-        String sql = "select distinct appname from "+ TABLENAME;
+        String sql = "select distinct appname,packagename from "+ TABLENAME;
         Cursor cursor = null;
         try {
             cursor = db.rawQuery(sql, null);
@@ -131,6 +132,7 @@ public class NotificationCancelListHelper extends SQLiteOpenHelper{
                 while (!cursor.isAfterLast()) {
                     HashMap<String,String> item = new HashMap<>();
                     item.put("parent",cursor.getString(INDEX_PATH));
+                    item.put("packagename",cursor.getString(cursor.getColumnIndexOrThrow("packagename")));
                     items.add(item);
                     cursor.moveToNext();
                 }

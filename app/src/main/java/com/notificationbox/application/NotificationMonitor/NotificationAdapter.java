@@ -14,6 +14,8 @@ import android.widget.TextView;
 
 import com.notificationbox.application.BaseContact;
 import com.notificationbox.application.R;
+import com.notificationbox.application.app.AppAdapter;
+import com.notificationbox.application.db.CancelListDBHelper;
 import com.notificationbox.application.db.NotificationCancelListHelper;
 
 import java.util.ArrayList;
@@ -41,9 +43,9 @@ public class NotificationAdapter extends BaseAdapter {
 
     private void resultList(ArrayList<HashMap<String,String>> notificationparentlist, ArrayList<HashMap<String ,String>> notificationchildlist){
         notificationResultList = new ArrayList<>();
-        for(int i = 0;i < notificationparentlist.size();i++){
+        for(int i = notificationparentlist.size() - 1;i >= 0 ;i--){
             notificationResultList.add(notificationparentlist.get(i));
-            for(int j = 0;j < notificationchildlist.size();j++){
+            for(int j = notificationchildlist.size() - 1;j >= 0;j--){
                 if(notificationparentlist.get(i).get("parent").equals(notificationchildlist.get(j).get("appname"))){
                        notificationResultList.add(notificationchildlist.get(j));
                 }
@@ -75,6 +77,7 @@ public class NotificationAdapter extends BaseAdapter {
                 convertView = vi.inflate(R.layout.notificationparent_item,null);
                 viewHolderFather.appName = (TextView) convertView.findViewById(R.id.appname);
                 viewHolderFather.cancelItem = (Button) convertView.findViewById(R.id.cancelItem);
+                viewHolderFather.addToList = (Button) convertView.findViewById(R.id.addToList);
                 convertView.setTag(viewHolderFather);
             }else if(type == CHILD_ITEM){
                 viewHolderChild = new ViewHolderChild();
@@ -101,6 +104,15 @@ public class NotificationAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         removeApp(context,notificationResultList.get(position).get("parent"),position,listView);
+                    }
+                });
+                viewHolderFather.addToList.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        CancelListDBHelper cancelListDBHelper = new CancelListDBHelper(context);
+                        BaseContact.cancellist.remove(notificationResultList.get(position).get("packagename"));
+                        cancelListDBHelper.deleteCancelListDB(notificationResultList.get(position).get("packagename"));
+                        AppAdapter.saveCheckStatus(false,context,notificationResultList.get(position).get("packagename"));
                     }
                 });
             }
@@ -161,7 +173,7 @@ public class NotificationAdapter extends BaseAdapter {
     static class ViewHolderFather {
         TextView appName;
 
-        Button cancelItem;
+        Button cancelItem,addToList;
 
         ImageView appIcon;
     }

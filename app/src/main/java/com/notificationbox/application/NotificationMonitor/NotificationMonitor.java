@@ -25,6 +25,7 @@ public class NotificationMonitor extends NotificationListenerService {
     private String notificationText;
     private String notificationSubText;
     private String notificationtime;
+    private String notificationPackageName;
     private Bitmap notificationLargeIcon;
     private Bitmap notificationSmallIcon;
     private String notificationAppName;
@@ -82,6 +83,7 @@ public class NotificationMonitor extends NotificationListenerService {
         notificationText = extras.getString(Notification.EXTRA_TEXT);
         notificationSubText = extras.getString(Notification.EXTRA_SUB_TEXT);
         notificationtime = getTime(sbn.getPostTime());
+        notificationPackageName = sbn.getPackageName();
         notificationAppName = getProgramNameByPackageName(this,sbn.getPackageName());
     }
     
@@ -94,7 +96,7 @@ public class NotificationMonitor extends NotificationListenerService {
                     Log.i("SevenNLScancel", "notificationText:" + notificationText);
                     Log.i("SevenNLScancel", "notificationSubText:" + notificationSubText);
                     Log.i("SevenNLScancel", "time:" + notificationtime);
-                    NotificationCancelListHelper.getInstance(this).insertDB(notificationAppName,notificationTitle,notificationText,notificationSubText,notificationtime);
+                    NotificationCancelListHelper.getInstance(this).insertDB(notificationAppName,notificationTitle,notificationText,notificationSubText,notificationtime,notificationPackageName);
                     if(android.os.Build.VERSION.SDK_INT > 20){
                         String key=sbn.getKey();
                         cancelNotification(key);
